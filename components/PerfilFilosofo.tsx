@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-
 import {
   ArrowLeft,
   Brain,
@@ -25,12 +24,10 @@ type Props = {
 
 export default function PerfilFilosofo({ filosofo }: Props) {
   const [fotoAbierta, setFotoAbierta] = useState(false);
-  // Cambiamos el estado para saber si abrimos "seguidores" o "seguidos"
   const [modalConexiones, setModalConexiones] = useState<
     "seguidores" | "seguidos" | null
   >(null);
 
-  // Filtramos SOLO a los filósofos que comparten la misma corriente y excluimos al perfil actual
   const conexionesAfines = filosofos.filter(
     (f) => f.slug !== filosofo.slug && f.corriente === filosofo.corriente,
   );
@@ -96,7 +93,7 @@ export default function PerfilFilosofo({ filosofo }: Props) {
         {/* PERFIL */}
         <div className="mx-auto max-w-4xl px-4 pb-16">
           <section className="pt-8 md:pt-12">
-            <div className="grid grid-cols-[105px_1fr] gap-5 sm:grid-cols-[150px_1fr] md:grid-cols-[220px_1fr] md:gap-12">
+            <div className="grid grid-cols-[90px_1fr] gap-4 sm:grid-cols-[150px_1fr] md:grid-cols-[220px_1fr] md:gap-12">
               {/* FOTO */}
               <div className="flex justify-center">
                 <button
@@ -105,7 +102,7 @@ export default function PerfilFilosofo({ filosofo }: Props) {
                   className="group relative"
                   aria-label={`Ver foto completa de ${filosofo.nombre}`}
                 >
-                  <div className="h-24 w-24 rounded-full bg-linear-to-tr from-[#65452F] via-[#B58B57] to-[#E0C495] p-0.75 transition duration-300 group-hover:scale-105 sm:h-32 sm:w-32 md:h-40 md:w-40">
+                  <div className="h-20 w-20 rounded-full bg-linear-to-tr from-[#65452F] via-[#B58B57] to-[#E0C495] p-0.75 transition duration-300 group-hover:scale-105 sm:h-32 sm:w-32 md:h-40 md:w-40">
                     <div className="h-full w-full rounded-full bg-[#F7EFE3] p-1">
                       <img
                         src={filosofo.imagenPerfil}
@@ -115,21 +112,21 @@ export default function PerfilFilosofo({ filosofo }: Props) {
                     </div>
                   </div>
 
-                  <div className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full border-[3px] border-[#F7EFE3] bg-[#3E2B1F] text-white sm:h-9 sm:w-9">
+                  <div className="absolute bottom-0 right-0 flex h-6 w-6 items-center justify-center rounded-full border-[2px] border-[#F7EFE3] bg-[#3E2B1F] text-white sm:h-9 sm:w-9 sm:border-[3px]">
                     {filosofo.corriente === "Filosofía Clásica" ? (
-                      <ScrollText size={14} />
+                      <ScrollText className="h-3 w-3 sm:h-4 sm:w-4" />
                     ) : filosofo.corriente === "Racionalismo" ||
                       filosofo.corriente === "Filosofía Moderna" ? (
-                      <Brain size={14} />
+                      <Brain className="h-3 w-3 sm:h-4 sm:w-4" />
                     ) : (
-                      <Eye size={14} />
+                      <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
                     )}
                   </div>
                 </button>
               </div>
 
-              {/* INFORMACIÓN DERECHA */}
-              <div className="min-w-0">
+              {/* INFORMACIÓN DERECHA (USUARIO Y STATS) */}
+              <div className="min-w-0 flex flex-col justify-center">
                 <div className="flex flex-wrap items-center gap-3">
                   <h2 className="truncate text-lg font-normal sm:text-xl">
                     @{filosofo.usuario}
@@ -140,7 +137,8 @@ export default function PerfilFilosofo({ filosofo }: Props) {
                   </span>
                 </div>
 
-                <div className="mt-6 hidden items-center gap-7 sm:flex md:gap-10">
+                {/* STATS (Aparecen al lado de la foto en todas las pantallas) */}
+                <div className="mt-3 flex items-center justify-between pr-2 sm:mt-6 sm:justify-start sm:gap-7 md:gap-10">
                   <Estadistica
                     numero={filosofo.publicaciones.length.toString()}
                     texto="publicaciones"
@@ -157,6 +155,7 @@ export default function PerfilFilosofo({ filosofo }: Props) {
                   />
                 </div>
 
+                {/* BIO PC (Oculto en móvil) */}
                 <div className="mt-6 hidden max-w-xl sm:block">
                   <h3 className="font-serif text-base font-bold">
                     {filosofo.nombre}
@@ -174,45 +173,24 @@ export default function PerfilFilosofo({ filosofo }: Props) {
               </div>
             </div>
 
-            {/* BIO MÓVIL */}
-            <div className="mt-6 sm:hidden">
-              <h3 className="font-serif text-base font-bold">
+            {/* BIO MÓVIL (Bajo la foto y los stats) */}
+            <div className="mt-5 sm:hidden">
+              <h3 className="font-serif text-sm font-bold">
                 {filosofo.nombre}
               </h3>
-              <p className="mt-1 text-xs font-semibold text-[#936C45]">
+              <p className="mt-0.5 text-[11px] font-semibold text-[#936C45]">
                 {filosofo.corriente}
               </p>
-              <p className="mt-3 text-sm leading-6 text-[#5E4B3E]">
+              <p className="mt-2 text-xs leading-5 text-[#5E4B3E]">
                 {filosofo.biografia}
               </p>
-              <p className="mt-3 font-serif text-sm font-bold italic">
+              <p className="mt-2 font-serif text-xs font-bold italic text-[#513421]">
                 “{filosofo.frase}”
               </p>
             </div>
 
-            {/* STATS MÓVIL */}
-            <div className="mt-6 grid grid-cols-3 border-y border-[#DACAB5] py-4 sm:hidden">
-              <Estadistica
-                numero={filosofo.publicaciones.length.toString()}
-                texto="publicaciones"
-                centrado
-              />
-              <Estadistica
-                numero={filosofo.seguidores}
-                texto="seguidores"
-                centrado
-                onClick={() => setModalConexiones("seguidores")}
-              />
-              <Estadistica
-                numero={filosofo.seguidos}
-                texto="seguidos"
-                centrado
-                onClick={() => setModalConexiones("seguidos")}
-              />
-            </div>
-
-            {/* DATOS */}
-            <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs text-[#765C47] sm:mt-7">
+            {/* DATOS COMUNES */}
+            <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-xs text-[#765C47] sm:mt-7 border-t border-[#DACAB5] sm:border-none pt-4 sm:pt-0">
               <div className="flex items-center gap-1.5">
                 <CalendarDays size={14} />
                 <span>{filosofo.nacimiento}</span>
@@ -229,7 +207,7 @@ export default function PerfilFilosofo({ filosofo }: Props) {
           </section>
 
           {/* HISTORIAS */}
-          <div className="mt-4">
+          <div className="mt-2 sm:mt-4">
             <Historias historias={filosofo.historias} />
           </div>
 
@@ -243,7 +221,7 @@ export default function PerfilFilosofo({ filosofo }: Props) {
       {/* MODAL FOTO DE PERFIL */}
       {fotoAbierta && (
         <div
-          className="fixed inset-0 z-300 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[300] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
           onClick={() => setFotoAbierta(false)}
         >
           <button
@@ -266,10 +244,10 @@ export default function PerfilFilosofo({ filosofo }: Props) {
         </div>
       )}
 
-      {/* MODAL CONEXIONES (TIPO INSTAGRAM) */}
+      {/* MODAL CONEXIONES */}
       {modalConexiones !== null && (
         <div
-          className="fixed inset-0 z-300 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[300] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
           onClick={() => setModalConexiones(null)}
         >
           <div
@@ -278,7 +256,7 @@ export default function PerfilFilosofo({ filosofo }: Props) {
           >
             {/* Header del modal */}
             <div className="flex items-center justify-between border-b border-[#DED0BD] px-4 py-3">
-              <div className="w-8"></div> {/* Spacer para centrar el título */}
+              <div className="w-8"></div>
               <h3 className="font-semibold text-base text-[#342319] capitalize">
                 {modalConexiones}
               </h3>
@@ -319,7 +297,6 @@ export default function PerfilFilosofo({ filosofo }: Props) {
                       </div>
                     </Link>
 
-                    {/* Botón estilo Instagram */}
                     <button className="rounded-lg bg-[#EADCC8] px-4 py-1.5 text-sm font-semibold text-[#342319] transition hover:bg-[#DED0BD]">
                       Siguiendo
                     </button>
@@ -334,25 +311,25 @@ export default function PerfilFilosofo({ filosofo }: Props) {
   );
 }
 
+// COMPONENTE ESTADISTICA ACTUALIZADO (Responsive nativo para móvil y PC)
 function Estadistica({
   numero,
   texto,
-  centrado = false,
   onClick,
 }: {
   numero: string;
   texto: string;
-  centrado?: boolean;
   onClick?: () => void;
 }) {
   const contenido = (
-    <>
-      <p className="text-sm sm:text-base">
-        <strong className="font-bold">{numero}</strong>{" "}
-        <span className="hidden md:inline">{texto}</span>
-      </p>
-      {centrado && <p className="mt-0.5 text-[10px] text-[#8E7967]">{texto}</p>}
-    </>
+    <div className="flex flex-col items-center sm:flex-row sm:items-baseline sm:gap-1.5">
+      <span className="text-[15px] font-bold text-[#342319] sm:text-base">
+        {numero}
+      </span>
+      <span className="text-[11px] text-[#8E7967] sm:text-base sm:text-[#342319]">
+        {texto}
+      </span>
+    </div>
   );
 
   if (onClick) {
@@ -360,14 +337,12 @@ function Estadistica({
       <button
         type="button"
         onClick={onClick}
-        className={`transition hover:opacity-70 ${
-          centrado ? "mx-auto text-center" : "text-left"
-        }`}
+        className="transition hover:opacity-70 text-center sm:text-left"
       >
         {contenido}
       </button>
     );
   }
 
-  return <div className={centrado ? "text-center" : ""}>{contenido}</div>;
+  return <div className="text-center sm:text-left">{contenido}</div>;
 }

@@ -9,9 +9,7 @@ type Props = {
   publicaciones: Publicacion[];
 };
 
-export default function Publicaciones({
-  publicaciones,
-}: Props) {
+export default function Publicaciones({ publicaciones }: Props) {
   const [publicacionSeleccionada, setPublicacionSeleccionada] =
     useState<Publicacion | null>(null);
 
@@ -43,19 +41,17 @@ export default function Publicaciones({
     };
   }, [publicacionSeleccionada]);
 
+  // Se eliminó la restricción de ancho para que abra en móvil
   function abrirPublicacion(publicacion: Publicacion) {
-    // Solo abrimos modal en computadora/tablet grande
-    if (window.innerWidth >= 768) {
-      setPublicacionSeleccionada(publicacion);
-    }
+    setPublicacionSeleccionada(publicacion);
   }
 
   return (
     <>
       {/* TÍTULO PUBLICACIONES */}
       <section>
-        <div className="mt-8 flex justify-center border-t border-[#D8C8B5]">
-          <div className="flex items-center gap-2 border-t border-[#3E2B1F] px-6 py-4 text-[11px] font-bold tracking-[0.14em]">
+        <div className="mt-8 flex justify-center border-t border-[#DED0BD]">
+          <div className="flex items-center gap-2 border-t border-[#342319] px-6 py-4 text-[11px] font-bold tracking-[0.14em]">
             <Grid3X3 size={14} />
             PUBLICACIONES
           </div>
@@ -68,7 +64,7 @@ export default function Publicaciones({
               key={publicacion.id}
               type="button"
               onClick={() => abrirPublicacion(publicacion)}
-              className="group relative aspect-square overflow-hidden bg-gray-100 text-left md:cursor-pointer"
+              className="group relative aspect-square overflow-hidden bg-[#EADCC8] text-left md:cursor-pointer"
               aria-label={`Abrir publicación: ${publicacion.titulo}`}
             >
               {/* IMAGEN */}
@@ -98,16 +94,16 @@ export default function Publicaciones({
               >
                 <div>
                   {publicacion.fecha && (
-                    <p className="mb-1 text-xs font-semibold uppercase tracking-widest">
+                    <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-[#F7EFE3]">
                       {publicacion.fecha}
                     </p>
                   )}
 
-                  <p className="font-bold">
+                  <p className="font-bold text-white">
                     {publicacion.titulo}
                   </p>
 
-                  <p className="mt-2 text-xs">
+                  <p className="mt-2 text-xs text-[#EADCC8]">
                     Ver publicación
                   </p>
                 </div>
@@ -117,18 +113,18 @@ export default function Publicaciones({
         </div>
       </section>
 
-      {/* MODAL - SOLO COMPUTADORA */}
+      {/* MODAL (COMPATIBLE CON MÓVIL Y PC) */}
       {publicacionSeleccionada && (
         <div
           className="
-            fixed inset-0 z-100
-            hidden
+            fixed inset-0 z-[400]
+            flex
             items-center
             justify-center
-            bg-black/80
-            p-6
+            bg-black/85
+            p-4
             backdrop-blur-sm
-            md:flex
+            sm:p-6
           "
           onClick={() => setPublicacionSeleccionada(null)}
         >
@@ -136,12 +132,12 @@ export default function Publicaciones({
           <div
             className="
               relative
-              max-h-[92vh]
+              max-h-[90vh]
               w-full
               max-w-3xl
               overflow-y-auto
               rounded-2xl
-              bg-white
+              bg-[#F7EFE3]
               shadow-2xl
             "
             onClick={(event) => event.stopPropagation()}
@@ -154,7 +150,7 @@ export default function Publicaciones({
                 absolute
                 right-4
                 top-4
-                z-20
+                z-30
                 flex
                 h-10
                 w-10
@@ -177,27 +173,30 @@ export default function Publicaciones({
                 src={`${publicacionSeleccionada.imagen}?auto=format&fit=crop&w=1400&q=90`}
                 alt={publicacionSeleccionada.titulo}
                 className="
-                  max-h-[58vh]
+                  max-h-[50vh]
                   w-full
                   object-contain
+                  sm:max-h-[58vh]
                 "
               />
             </div>
 
             {/* INFORMACIÓN ABAJO */}
-            <div className="p-7">
+            <div className="p-5 sm:p-7">
               {/* CABECERA PEQUEÑA */}
-              <div className="mb-5 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black text-sm font-bold text-white">
-                  Φ
-                </div>
+              <div className="mb-4 flex items-center gap-3">
+                <img
+                  src="/logo-filosofia.png"
+                  alt="Philosogram"
+                  className="h-10 w-10 rounded-full object-contain bg-[#342319] p-1"
+                />
 
                 <div>
-                  <p className="text-sm font-bold">
+                  <p className="text-sm font-bold text-[#342319]">
                     Philosogram
                   </p>
 
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-[#765C47]">
                     Historia de la filosofía
                   </p>
                 </div>
@@ -205,24 +204,24 @@ export default function Publicaciones({
 
               {/* FECHA */}
               {publicacionSeleccionada.fecha && (
-                <p className="mb-2 text-sm font-semibold text-gray-500">
+                <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-[#936C45] sm:text-sm">
                   {publicacionSeleccionada.fecha}
                 </p>
               )}
 
               {/* TÍTULO */}
-              <h2 className="text-2xl font-bold">
+              <h2 className="text-xl font-bold text-[#342319] sm:text-2xl">
                 {publicacionSeleccionada.titulo}
               </h2>
 
               {/* DESCRIPCIÓN */}
-              <p className="mt-4 text-base leading-7 text-gray-700">
+              <p className="mt-3 text-sm leading-7 text-[#5E4B3E] sm:mt-4 sm:text-base">
                 {publicacionSeleccionada.descripcion}
               </p>
 
               {/* PIE */}
-              <div className="mt-7 border-t border-gray-200 pt-4">
-                <p className="text-xs text-gray-400">
+              <div className="mt-6 border-t border-[#DED0BD] pt-4 sm:mt-7">
+                <p className="text-[10px] uppercase tracking-widest text-[#936C45] sm:text-xs">
                   Publicación histórica · Philosogram
                 </p>
               </div>

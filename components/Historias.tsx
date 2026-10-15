@@ -39,11 +39,9 @@ export default function Historias({ historias }: Props) {
     };
   }, [historiaSeleccionada]);
 
+  // Se eliminó la restricción de ancho para que abra en cualquier dispositivo
   function abrirHistoria(historia: Historia) {
-    // Solo abre modal en computadora
-    if (window.innerWidth >= 768) {
-      setHistoriaSeleccionada(historia);
-    }
+    setHistoriaSeleccionada(historia);
   }
 
   return (
@@ -91,7 +89,7 @@ export default function Historias({ historias }: Props) {
                 "
               >
                 {/* BORDE BLANCO */}
-                <div className="h-full w-full rounded-full bg-white p-[3px]">
+                <div className="h-full w-full rounded-full bg-[#F7EFE3] p-[3px]">
                   <img
                     src={`${historia.imagen}?auto=format&fit=crop&w=400&q=85`}
                     alt={historia.titulo}
@@ -100,7 +98,7 @@ export default function Historias({ historias }: Props) {
                 </div>
               </div>
 
-              <p className="mt-2 max-w-[85px] truncate text-xs font-semibold">
+              <p className="mt-2 max-w-[85px] truncate text-xs font-semibold text-[#342319]">
                 {historia.titulo}
               </p>
             </button>
@@ -114,14 +112,14 @@ export default function Historias({ historias }: Props) {
           className="
             fixed
             inset-0
-            z-[200]
-            hidden
+            z-[400]
+            flex
             items-center
             justify-center
             bg-black/85
-            p-6
+            p-4
             backdrop-blur-sm
-            md:flex
+            sm:p-6
           "
           onClick={() => setHistoriaSeleccionada(null)}
         >
@@ -133,7 +131,7 @@ export default function Historias({ historias }: Props) {
               max-w-xl
               overflow-y-auto
               rounded-3xl
-              bg-white
+              bg-[#F7EFE3]
               shadow-2xl
             "
             onClick={(event) => event.stopPropagation()}
@@ -168,49 +166,51 @@ export default function Historias({ historias }: Props) {
               <img
                 src={`${historiaSeleccionada.imagen}?auto=format&fit=crop&w=1200&q=90`}
                 alt={historiaSeleccionada.titulo}
-                className="max-h-[58vh] w-full object-cover"
+                className="max-h-[50vh] w-full object-cover sm:max-h-[58vh]"
               />
 
               {/* DEGRADADO */}
-              <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/70 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/80 to-transparent" />
 
               {/* TITULO ENCIMA DE IMAGEN */}
-              <div className="absolute bottom-5 left-6 right-6 text-white">
-                <p className="mb-1 text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
+              <div className="absolute bottom-5 left-5 right-5 text-[#F7EFE3]">
+                <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#F7EFE3]/80 sm:text-xs">
                   Historia destacada
                 </p>
 
-                <h2 className="text-2xl font-bold">
+                <h2 className="text-xl font-bold sm:text-2xl">
                   {historiaSeleccionada.titulo}
                 </h2>
               </div>
             </div>
 
             {/* INFORMACIÓN */}
-            <div className="p-6">
-              <div className="mb-5 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black text-white">
-                  Φ
-                </div>
+            <div className="p-5 sm:p-6">
+              <div className="mb-4 flex items-center gap-3">
+                <img
+                  src="/logo-filosofia.png"
+                  alt="Philosogram"
+                  className="h-10 w-10 rounded-full object-contain bg-[#342319] p-1"
+                />
 
                 <div>
-                  <p className="text-sm font-bold">
+                  <p className="text-sm font-bold text-[#342319]">
                     Philosogram
                   </p>
 
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-[#765C47]">
                     Historia de la filosofía
                   </p>
                 </div>
               </div>
 
-              <p className="text-sm leading-7 text-gray-700">
+              <p className="text-sm leading-7 text-[#5E4B3E]">
                 {historiaSeleccionada.descripcion ||
                   "Información destacada sobre esta etapa de la vida y pensamiento del filósofo."}
               </p>
 
-              <div className="mt-6 border-t border-gray-200 pt-4">
-                <p className="text-xs text-gray-400">
+              <div className="mt-6 border-t border-[#DED0BD] pt-4">
+                <p className="text-[10px] uppercase tracking-widest text-[#936C45] sm:text-xs">
                   Historia destacada · Philosogram
                 </p>
               </div>
