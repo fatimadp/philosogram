@@ -1,69 +1,278 @@
-import Image from "next/image";
+import Link from "next/link";
+
+import {
+  Brain,
+  Eye,
+  ScrollText,
+} from "lucide-react";
+
+type Filosofo = {
+  nombre: string;
+  usuario: string;
+  corriente: "Racionalismo" | "Empirismo";
+  imagen: string;
+  slug: string;
+};
+
+const filosofos: Filosofo[] = [
+  {
+    nombre: "René Descartes",
+    usuario: "rene_descartes",
+    corriente: "Racionalismo",
+    imagen: "/filosofos/descartes/rene-descartes.jpg",
+    slug: "rene-descartes",
+  },
+  {
+    nombre: "Baruch Spinoza",
+    usuario: "baruch_spinoza",
+    corriente: "Racionalismo",
+    imagen: "/filosofos/baruch/baruch-spinoza.jpg",
+    slug: "baruch-spinoza",
+  },
+  {
+    nombre: "Gottfried Leibniz",
+    usuario: "gottfried_leibniz",
+    corriente: "Racionalismo",
+    imagen: "/filosofos/gottfried/gottfried.jpg",
+    slug: "gottfried-leibniz",
+  },
+  {
+    nombre: "John Locke",
+    usuario: "john_locke",
+    corriente: "Empirismo",
+    imagen: "/filosofos/john/john.jpg",
+    slug: "john-locke",
+  },
+  {
+    nombre: "George Berkeley",
+    usuario: "george_berkeley",
+    corriente: "Empirismo",
+    imagen: "/filosofos/george/george.jpg",
+    slug: "george-berkeley",
+  },
+  {
+    nombre: "David Hume",
+    usuario: "david_hume",
+    corriente: "Empirismo",
+    imagen: "/filosofos/david/david.jpg",
+    slug: "david-hume",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <main className="min-h-screen bg-[#F4EBDD] text-[#3E2B1F]">
+      {/* HEADER */}
+      <header className="border-b border-[#CDB798]/70 bg-[#F4EBDD]/95 backdrop-blur">
+        <div className="mx-auto flex max-w-7xl items-center justify-center px-5 py-5">
+          <div className="flex items-center gap-3">
+            <div className="h-11 w-11 overflow-hidden rounded-full">
+              <img
+                src="/logo-filosofia.png"
+                alt="Logo Philosogram"
+                className="h-full w-full object-contain"
+              />
+            </div>
+
+            <div>
+              <h1 className="font-serif text-xl font-bold">
+                Philosogram
+              </h1>
+
+              <p className="text-[10px] uppercase tracking-[0.18em] text-[#987653]">
+                Filosofía moderna
+              </p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* PRESENTACIÓN */}
+      <section className="mx-auto max-w-6xl px-5 pb-6 pt-12 text-center md:pt-16">
+        <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#A67C52]">
+          Racionalismo y Empirismo
+        </p>
+
+        <h2 className="mt-4 font-serif text-3xl font-bold sm:text-4xl md:text-5xl">
+          Conoce a los filósofos
+        </h2>
+
+        <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-[#77614E] md:text-base">
+          Selecciona un perfil para conocer su vida, pensamiento y principales
+          aportaciones.
+        </p>
+      </section>
+
+      {/* LEYENDA */}
+      <section className="mx-auto mt-7 flex max-w-6xl justify-center px-5">
+        <div className="flex items-center gap-5 rounded-full border border-[#D7C2A6] bg-[#EBDDCA]/70 px-5 py-2.5">
+          <div className="flex items-center gap-2 text-xs font-semibold text-[#704C32]">
+            <Brain size={15} />
+            Racionalismo
+          </div>
+
+          <div className="h-4 w-px bg-[#CDB798]" />
+
+          <div className="flex items-center gap-2 text-xs font-semibold text-[#704C32]">
+            <Eye size={15} />
+            Empirismo
+          </div>
+        </div>
+      </section>
+
+      {/* 6 FILÓSOFOS */}
+      <section className="mx-auto flex max-w-[1500px] items-center justify-center px-5 pb-20 pt-12">
+        <div
+          className="
+            grid
+            w-full
+            grid-cols-2
+            gap-x-6
+            gap-y-10
+            sm:grid-cols-3
+            lg:grid-cols-6
+            lg:gap-x-7
+          "
+        >
+          {filosofos.map((filosofo, index) => (
+            <Link
+              key={filosofo.slug}
+              href={`/filosofos/${filosofo.slug}`}
+              className="
+                filosofo-bubble
+                group
+                flex
+                min-w-0
+                flex-col
+                items-center
+                text-center
+              "
+              style={{
+                animationDelay: `${index * 100}ms`,
+              }}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+              {/* FOTO */}
+              <div className="relative">
+                {/* HALO */}
+                <div
+                  className="
+                    absolute
+                    inset-3
+                    rounded-full
+                    bg-[#A67C52]/25
+                    blur-xl
+                    transition
+                    duration-500
+                    group-hover:scale-125
+                    group-hover:bg-[#A67C52]/40
+                  "
+                />
+
+                {/* CÍRCULO */}
+                <div
+                  className="
+                    relative
+                    h-28
+                    w-28
+                    rounded-full
+                    bg-gradient-to-tr
+                    from-[#5B3A29]
+                    via-[#B38A4A]
+                    to-[#DFC9A8]
+                    p-[3px]
+                    shadow-[0_10px_28px_rgba(62,43,31,0.16)]
+                    transition
+                    duration-500
+                    group-hover:-translate-y-2
+                    group-hover:scale-105
+                    group-hover:shadow-[0_18px_38px_rgba(62,43,31,0.24)]
+                    xl:h-32
+                    xl:w-32
+                  "
+                >
+                  <div className="h-full w-full rounded-full bg-[#F4EBDD] p-[5px]">
+                    <img
+                      src={filosofo.imagen}
+                      alt={filosofo.nombre}
+                      className="
+                        h-full
+                        w-full
+                        rounded-full
+                        object-cover
+                        sepia-[0.12]
+                        transition
+                        duration-700
+                        group-hover:scale-[1.04]
+                        group-hover:sepia-0
+                      "
+                    />
+                  </div>
+                </div>
+
+                {/* TIPO */}
+                <div
+                  className="
+                    absolute
+                    bottom-0
+                    right-0
+                    flex
+                    h-8
+                    w-8
+                    items-center
+                    justify-center
+                    rounded-full
+                    border-[3px]
+                    border-[#F4EBDD]
+                    bg-[#3E2B1F]
+                    text-[#F4EBDD]
+                    shadow-md
+                    transition
+                    duration-300
+                    group-hover:scale-110
+                  "
+                >
+                  {filosofo.corriente === "Racionalismo" ? (
+                    <Brain size={13} />
+                  ) : (
+                    <Eye size={13} />
+                  )}
+                </div>
+              </div>
+
+              {/* NOMBRE */}
+              <h3 className="mt-5 min-h-[48px] font-serif text-base font-bold leading-5 xl:text-lg">
+                {filosofo.nombre}
+              </h3>
+
+              {/* USUARIO */}
+              <p className="mt-1 max-w-full truncate text-xs text-[#987653]">
+                @{filosofo.usuario}
+              </p>
+
+              {/* CORRIENTE */}
+              <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.14em] text-[#A67C52]">
+                {filosofo.corriente}
+              </p>
+
+              {/* HOVER */}
+              <div className="mt-3 h-[2px] w-0 rounded-full bg-[#704C32] transition-all duration-500 group-hover:w-12" />
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="border-t border-[#CDB798]/70">
+        <div className="mx-auto max-w-6xl px-5 py-6 text-center">
+          <p className="font-serif text-sm font-bold">
+            FILOSOFÍA DEL PENSAMIENTO HUMANISTA CONTEMPORÁNEO
+          </p>
+
+          <p className="mt-1 text-xs text-[#9A7B5C]">
+            by Fátima Durán Peralta
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </footer>
+    </main>
   );
 }
