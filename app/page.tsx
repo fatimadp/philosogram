@@ -1,61 +1,45 @@
 import Link from "next/link";
-
 import {
   Brain,
-  Eye,
   ScrollText,
 } from "lucide-react";
 
 type Filosofo = {
   nombre: string;
   usuario: string;
-  corriente: "Racionalismo" | "Empirismo";
+  corriente: "Filosofía Clásica" | "Filosofía Moderna";
   imagen: string;
   slug: string;
 };
 
 const filosofos: Filosofo[] = [
   {
+    nombre: "Platón",
+    usuario: "platon_oficial",
+    corriente: "Filosofía Clásica",
+    imagen: "/filosofos/platon/platon.jpg",
+    slug: "platon",
+  },
+  {
+    nombre: "Aristóteles",
+    usuario: "aristoteles",
+    corriente: "Filosofía Clásica",
+    imagen: "/filosofos/aristoteles/aristoteles.jpeg",
+    slug: "aristoteles",
+  },
+  {
     nombre: "René Descartes",
     usuario: "rene_descartes",
-    corriente: "Racionalismo",
+    corriente: "Filosofía Moderna",
     imagen: "/filosofos/descartes/rene-descartes.jpg",
     slug: "rene-descartes",
   },
   {
     nombre: "Baruch Spinoza",
     usuario: "baruch_spinoza",
-    corriente: "Racionalismo",
+    corriente: "Filosofía Moderna",
     imagen: "/filosofos/baruch/baruch-spinoza.jpg",
     slug: "baruch-spinoza",
-  },
-  {
-    nombre: "Gottfried Leibniz",
-    usuario: "gottfried_leibniz",
-    corriente: "Racionalismo",
-    imagen: "/filosofos/gottfried/gottfried.jpg",
-    slug: "gottfried-leibniz",
-  },
-  {
-    nombre: "John Locke",
-    usuario: "john_locke",
-    corriente: "Empirismo",
-    imagen: "/filosofos/john/john.jpg",
-    slug: "john-locke",
-  },
-  {
-    nombre: "George Berkeley",
-    usuario: "george_berkeley",
-    corriente: "Empirismo",
-    imagen: "/filosofos/george/george.jpg",
-    slug: "george-berkeley",
-  },
-  {
-    nombre: "David Hume",
-    usuario: "david_hume",
-    corriente: "Empirismo",
-    imagen: "/filosofos/david/david.jpg",
-    slug: "david-hume",
   },
 ];
 
@@ -80,7 +64,7 @@ export default function Home() {
               </h1>
 
               <p className="text-[10px] uppercase tracking-[0.18em] text-[#987653]">
-                Filosofía moderna
+                Historia del Pensamiento
               </p>
             </div>
           </div>
@@ -90,7 +74,7 @@ export default function Home() {
       {/* PRESENTACIÓN */}
       <section className="mx-auto max-w-6xl px-5 pb-6 pt-12 text-center md:pt-16">
         <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#A67C52]">
-          Racionalismo y Empirismo
+          De la Antigüedad a la Modernidad
         </p>
 
         <h2 className="mt-4 font-serif text-3xl font-bold sm:text-4xl md:text-5xl">
@@ -105,23 +89,23 @@ export default function Home() {
 
       {/* LEYENDA */}
       <section className="mx-auto mt-7 flex max-w-6xl justify-center px-5">
-        <div className="flex items-center gap-5 rounded-full border border-[#D7C2A6] bg-[#EBDDCA]/70 px-5 py-2.5">
+        <div className="flex flex-wrap items-center justify-center gap-3 rounded-full border border-[#D7C2A6] bg-[#EBDDCA]/70 px-5 py-2.5 sm:gap-5">
           <div className="flex items-center gap-2 text-xs font-semibold text-[#704C32]">
-            <Brain size={15} />
-            Racionalismo
+            <ScrollText size={15} />
+            Filosofía Clásica
           </div>
 
-          <div className="h-4 w-px bg-[#CDB798]" />
+          <div className="hidden h-4 w-px bg-[#CDB798] sm:block" />
 
           <div className="flex items-center gap-2 text-xs font-semibold text-[#704C32]">
-            <Eye size={15} />
-            Empirismo
+            <Brain size={15} />
+            Filosofía Moderna
           </div>
         </div>
       </section>
 
-      {/* 6 FILÓSOFOS */}
-      <section className="mx-auto flex max-w-[1500px] items-center justify-center px-5 pb-20 pt-12">
+      {/* 4 FILÓSOFOS */}
+      <section className="mx-auto flex max-w-375 items-center justify-center px-5 pb-20 pt-12">
         <div
           className="
             grid
@@ -129,8 +113,7 @@ export default function Home() {
             grid-cols-2
             gap-x-6
             gap-y-10
-            sm:grid-cols-3
-            lg:grid-cols-6
+            sm:grid-cols-4
             lg:gap-x-7
           "
         >
@@ -175,11 +158,11 @@ export default function Home() {
                     h-28
                     w-28
                     rounded-full
-                    bg-gradient-to-tr
+                    bg-linear-to-tr
                     from-[#5B3A29]
                     via-[#B38A4A]
                     to-[#DFC9A8]
-                    p-[3px]
+                    p-0.75
                     shadow-[0_10px_28px_rgba(62,43,31,0.16)]
                     transition
                     duration-500
@@ -190,7 +173,7 @@ export default function Home() {
                     xl:w-32
                   "
                 >
-                  <div className="h-full w-full rounded-full bg-[#F4EBDD] p-[5px]">
+                  <div className="h-full w-full rounded-full bg-[#F4EBDD] p-1.25">
                     <img
                       src={filosofo.imagen}
                       alt={filosofo.nombre}
@@ -231,16 +214,16 @@ export default function Home() {
                     group-hover:scale-110
                   "
                 >
-                  {filosofo.corriente === "Racionalismo" ? (
-                    <Brain size={13} />
+                  {filosofo.corriente === "Filosofía Clásica" ? (
+                    <ScrollText size={13} />
                   ) : (
-                    <Eye size={13} />
+                    <Brain size={13} />
                   )}
                 </div>
               </div>
 
               {/* NOMBRE */}
-              <h3 className="mt-5 min-h-[48px] font-serif text-base font-bold leading-5 xl:text-lg">
+              <h3 className="mt-5 min-h-12 font-serif text-base font-bold leading-5 xl:text-lg">
                 {filosofo.nombre}
               </h3>
 
@@ -255,7 +238,7 @@ export default function Home() {
               </p>
 
               {/* HOVER */}
-              <div className="mt-3 h-[2px] w-0 rounded-full bg-[#704C32] transition-all duration-500 group-hover:w-12" />
+              <div className="mt-3 h-0.5 w-0 rounded-full bg-[#704C32] transition-all duration-500 group-hover:w-12" />
             </Link>
           ))}
         </div>

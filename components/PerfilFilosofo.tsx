@@ -9,12 +9,12 @@ import {
   Eye,
   MapPin,
   MoreHorizontal,
+  ScrollText,
   X,
 } from "lucide-react";
 
 import { useEffect, useState } from "react";
-
-import { Filosofo } from "@/data/filosofos";
+import { Filosofo, filosofos } from "@/data/filosofos";
 
 import Historias from "./Historias";
 import Publicaciones from "./Publicaciones";
@@ -23,15 +23,23 @@ type Props = {
   filosofo: Filosofo;
 };
 
-export default function PerfilFilosofo({
-  filosofo,
-}: Props) {
+export default function PerfilFilosofo({ filosofo }: Props) {
   const [fotoAbierta, setFotoAbierta] = useState(false);
+  // Cambiamos el estado para saber si abrimos "seguidores" o "seguidos"
+  const [modalConexiones, setModalConexiones] = useState<
+    "seguidores" | "seguidos" | null
+  >(null);
+
+  // Filtramos SOLO a los filósofos que comparten la misma corriente y excluimos al perfil actual
+  const conexionesAfines = filosofos.filter(
+    (f) => f.slug !== filosofo.slug && f.corriente === filosofo.corriente,
+  );
 
   useEffect(() => {
     function cerrarConEscape(event: KeyboardEvent) {
       if (event.key === "Escape") {
         setFotoAbierta(false);
+        setModalConexiones(null);
       }
     }
 
@@ -43,7 +51,7 @@ export default function PerfilFilosofo({
   }, []);
 
   useEffect(() => {
-    if (fotoAbierta) {
+    if (fotoAbierta || modalConexiones !== null) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -52,7 +60,7 @@ export default function PerfilFilosofo({
     return () => {
       document.body.style.overflow = "";
     };
-  }, [fotoAbierta]);
+  }, [fotoAbierta, modalConexiones]);
 
   return (
     <>
@@ -73,10 +81,7 @@ export default function PerfilFilosofo({
                 alt="Philosogram"
                 className="h-8 w-8 rounded-full object-contain"
               />
-
-              <h1 className="font-serif text-xl font-bold">
-                Philosogram
-              </h1>
+              <h1 className="font-serif text-xl font-bold">Philosogram</h1>
             </div>
 
             <button
@@ -100,26 +105,8 @@ export default function PerfilFilosofo({
                   className="group relative"
                   aria-label={`Ver foto completa de ${filosofo.nombre}`}
                 >
-                  <div
-                    className="
-                      h-24
-                      w-24
-                      rounded-full
-                      bg-gradient-to-tr
-                      from-[#65452F]
-                      via-[#B58B57]
-                      to-[#E0C495]
-                      p-[3px]
-                      transition
-                      duration-300
-                      group-hover:scale-105
-                      sm:h-32
-                      sm:w-32
-                      md:h-40
-                      md:w-40
-                    "
-                  >
-                    <div className="h-full w-full rounded-full bg-[#F7EFE3] p-[4px]">
+                  <div className="h-24 w-24 rounded-full bg-linear-to-tr from-[#65452F] via-[#B58B57] to-[#E0C495] p-0.75 transition duration-300 group-hover:scale-105 sm:h-32 sm:w-32 md:h-40 md:w-40">
+                    <div className="h-full w-full rounded-full bg-[#F7EFE3] p-1">
                       <img
                         src={filosofo.imagenPerfil}
                         alt={filosofo.nombre}
@@ -128,26 +115,11 @@ export default function PerfilFilosofo({
                     </div>
                   </div>
 
-                  <div
-                    className="
-                      absolute
-                      bottom-0
-                      right-0
-                      flex
-                      h-8
-                      w-8
-                      items-center
-                      justify-center
-                      rounded-full
-                      border-[3px]
-                      border-[#F7EFE3]
-                      bg-[#3E2B1F]
-                      text-white
-                      sm:h-9
-                      sm:w-9
-                    "
-                  >
-                    {filosofo.corriente === "Racionalismo" ? (
+                  <div className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full border-[3px] border-[#F7EFE3] bg-[#3E2B1F] text-white sm:h-9 sm:w-9">
+                    {filosofo.corriente === "Filosofía Clásica" ? (
+                      <ScrollText size={14} />
+                    ) : filosofo.corriente === "Racionalismo" ||
+                      filosofo.corriente === "Filosofía Moderna" ? (
                       <Brain size={14} />
                     ) : (
                       <Eye size={14} />
@@ -163,7 +135,7 @@ export default function PerfilFilosofo({
                     @{filosofo.usuario}
                   </h2>
 
-                  <span className="hidden rounded-lg bg-[#E7D6BE] px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.1em] text-[#745234] sm:inline-block">
+                  <span className="hidden rounded-lg bg-[#E7D6BE] px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-[#745234] sm:inline-block">
                     {filosofo.corriente}
                   </span>
                 </div>
@@ -173,15 +145,15 @@ export default function PerfilFilosofo({
                     numero={filosofo.publicaciones.length.toString()}
                     texto="publicaciones"
                   />
-
                   <Estadistica
                     numero={filosofo.seguidores}
                     texto="seguidores"
+                    onClick={() => setModalConexiones("seguidores")}
                   />
-
                   <Estadistica
                     numero={filosofo.seguidos}
                     texto="seguidos"
+                    onClick={() => setModalConexiones("seguidos")}
                   />
                 </div>
 
@@ -189,15 +161,12 @@ export default function PerfilFilosofo({
                   <h3 className="font-serif text-base font-bold">
                     {filosofo.nombre}
                   </h3>
-
                   <p className="mt-1 text-sm font-semibold text-[#936C45]">
                     Filósofo · {filosofo.corriente}
                   </p>
-
                   <p className="mt-3 text-sm leading-6 text-[#5E4B3E]">
                     {filosofo.biografia}
                   </p>
-
                   <p className="mt-3 font-serif text-sm font-bold italic text-[#513421]">
                     “{filosofo.frase}”
                   </p>
@@ -210,15 +179,12 @@ export default function PerfilFilosofo({
               <h3 className="font-serif text-base font-bold">
                 {filosofo.nombre}
               </h3>
-
               <p className="mt-1 text-xs font-semibold text-[#936C45]">
                 {filosofo.corriente}
               </p>
-
               <p className="mt-3 text-sm leading-6 text-[#5E4B3E]">
                 {filosofo.biografia}
               </p>
-
               <p className="mt-3 font-serif text-sm font-bold italic">
                 “{filosofo.frase}”
               </p>
@@ -231,17 +197,17 @@ export default function PerfilFilosofo({
                 texto="publicaciones"
                 centrado
               />
-
               <Estadistica
                 numero={filosofo.seguidores}
                 texto="seguidores"
                 centrado
+                onClick={() => setModalConexiones("seguidores")}
               />
-
               <Estadistica
                 numero={filosofo.seguidos}
                 texto="seguidos"
                 centrado
+                onClick={() => setModalConexiones("seguidos")}
               />
             </div>
 
@@ -251,12 +217,10 @@ export default function PerfilFilosofo({
                 <CalendarDays size={14} />
                 <span>{filosofo.nacimiento}</span>
               </div>
-
               <div className="flex items-center gap-1.5">
                 <MapPin size={14} />
                 <span>{filosofo.lugarNacimiento}</span>
               </div>
-
               <div className="flex items-center gap-1.5">
                 <span className="font-semibold">†</span>
                 <span>{filosofo.fallecimiento}</span>
@@ -271,9 +235,7 @@ export default function PerfilFilosofo({
 
           {/* PUBLICACIONES */}
           <div className="mt-3">
-            <Publicaciones
-              publicaciones={filosofo.publicaciones}
-            />
+            <Publicaciones publicaciones={filosofo.publicaciones} />
           </div>
         </div>
       </main>
@@ -281,18 +243,16 @@ export default function PerfilFilosofo({
       {/* MODAL FOTO DE PERFIL */}
       {fotoAbierta && (
         <div
-          className="fixed inset-0 z-[300] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-300 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
           onClick={() => setFotoAbierta(false)}
         >
           <button
             type="button"
             onClick={() => setFotoAbierta(false)}
             className="absolute right-5 top-5 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
-            aria-label="Cerrar foto"
           >
             <X size={24} />
           </button>
-
           <div
             className="relative flex max-h-[92vh] max-w-[92vw] items-center justify-center"
             onClick={(event) => event.stopPropagation()}
@@ -305,6 +265,71 @@ export default function PerfilFilosofo({
           </div>
         </div>
       )}
+
+      {/* MODAL CONEXIONES (TIPO INSTAGRAM) */}
+      {modalConexiones !== null && (
+        <div
+          className="fixed inset-0 z-300 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
+          onClick={() => setModalConexiones(null)}
+        >
+          <div
+            className="relative w-full max-w-sm max-h-[75vh] flex flex-col overflow-hidden rounded-2xl bg-[#F7EFE3] shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            {/* Header del modal */}
+            <div className="flex items-center justify-between border-b border-[#DED0BD] px-4 py-3">
+              <div className="w-8"></div> {/* Spacer para centrar el título */}
+              <h3 className="font-semibold text-base text-[#342319] capitalize">
+                {modalConexiones}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setModalConexiones(null)}
+                className="flex w-8 items-center justify-end text-[#342319]"
+              >
+                <X size={22} />
+              </button>
+            </div>
+
+            {/* Lista de usuarios */}
+            <div className="flex-1 overflow-y-auto px-4 py-4">
+              <div className="flex flex-col gap-4">
+                {conexionesAfines.map((f) => (
+                  <div
+                    key={f.slug}
+                    className="flex items-center justify-between"
+                  >
+                    <Link
+                      href={`/filosofos/${f.slug}`}
+                      className="flex items-center gap-3"
+                      onClick={() => setModalConexiones(null)}
+                    >
+                      <img
+                        src={f.imagenPerfil}
+                        alt={f.nombre}
+                        className="h-12 w-12 rounded-full object-cover border border-[#DED0BD]"
+                      />
+                      <div className="flex flex-col">
+                        <span className="text-sm font-semibold text-[#342319]">
+                          {f.usuario}
+                        </span>
+                        <span className="text-xs text-[#765C47]">
+                          {f.nombre}
+                        </span>
+                      </div>
+                    </Link>
+
+                    {/* Botón estilo Instagram */}
+                    <button className="rounded-lg bg-[#EADCC8] px-4 py-1.5 text-sm font-semibold text-[#342319] transition hover:bg-[#DED0BD]">
+                      Siguiendo
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
@@ -313,27 +338,36 @@ function Estadistica({
   numero,
   texto,
   centrado = false,
+  onClick,
 }: {
   numero: string;
   texto: string;
   centrado?: boolean;
+  onClick?: () => void;
 }) {
-  return (
-    <div className={centrado ? "text-center" : ""}>
+  const contenido = (
+    <>
       <p className="text-sm sm:text-base">
-        <strong className="font-bold">
-          {numero}
-        </strong>{" "}
-        <span className="hidden md:inline">
-          {texto}
-        </span>
+        <strong className="font-bold">{numero}</strong>{" "}
+        <span className="hidden md:inline">{texto}</span>
       </p>
-
-      {centrado && (
-        <p className="mt-0.5 text-[10px] text-[#8E7967]">
-          {texto}
-        </p>
-      )}
-    </div>
+      {centrado && <p className="mt-0.5 text-[10px] text-[#8E7967]">{texto}</p>}
+    </>
   );
+
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className={`transition hover:opacity-70 ${
+          centrado ? "mx-auto text-center" : "text-left"
+        }`}
+      >
+        {contenido}
+      </button>
+    );
+  }
+
+  return <div className={centrado ? "text-center" : ""}>{contenido}</div>;
 }

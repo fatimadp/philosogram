@@ -121,7 +121,7 @@ export default function Publicaciones({
       {publicacionSeleccionada && (
         <div
           className="
-            fixed inset-0 z-[100]
+            fixed inset-0 z-100
             hidden
             items-center
             justify-center

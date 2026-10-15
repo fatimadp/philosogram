@@ -1,10 +1,9 @@
 import { notFound } from "next/navigation";
-
 import PerfilFilosofo from "@/components/PerfilFilosofo";
 import { obtenerFilosofo } from "@/data/filosofos";
 
-export default function JohnLockePage() {
-  const filosofo = obtenerFilosofo("john-locke");
+export default function PlatonPage() {
+  const filosofo = obtenerFilosofo("platon");
 
   if (!filosofo) {
     notFound();
